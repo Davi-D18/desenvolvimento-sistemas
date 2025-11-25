@@ -6,14 +6,11 @@ Este repositório armazena as atividades e materiais do curso Técnico em Desenv
 
 Estrutura
 ------------------
-- /Materia-A/
+- /logica-programacao/
   - /atv/          ← atividades (exercícios, trabalhos)
-- /Materia-B/
-  - /atv/
-  - ...
 - README.md
 
 Organização das Branches
 -----------------------
 - main            ← branch principal com informações gerais
-- Introdutorio    ← Atividades relacionados ao moduo introdutorio
+- Introdutorio    ← Atividades relacionados ao modulo introdutorio
