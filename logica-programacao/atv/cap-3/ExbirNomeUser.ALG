@@ -1,16 +1,16 @@
-Algoritmo "semnome"
-// Disciplina   : [Lógica de Programação]
+Algoritmo "ExibirNomeUser"
+// Disciplina   : [Lï¿½gica de Programaï¿½ï¿½o]
 // Professor   : Hilton Elias
-// Descrição   : Aqui você descreve o que o programa faz! (função)
+// Descriï¿½ï¿½o   : Aqui vocï¿½ descreve o que o programa faz! (funï¿½ï¿½o)
 // Autor(a)    : Nome do(a) aluno(a)
 // Data atual  : 21/11/2025
 Var
-   // Seção de Declarações das variáveis
+   // Seï¿½ï¿½o de Declaraï¿½ï¿½es das variï¿½veis
    NomeUsuario: Caractere
 
 Inicio
-   // Seção de Comandos, procedimento, funções, operadores, etc...
+   // Seï¿½ï¿½o de Comandos, procedimento, funï¿½ï¿½es, operadores, etc...
    Escreva("Informe seu nome: ")
    Leia(NomeUsuario)
-   Escreval("Olá " + NomeUsuario + " Seja bem vindo e tenha um Bom dia!")
+   Escreval("Olï¿½ " + NomeUsuario + " Seja bem vindo e tenha um Bom dia!")
 Fimalgoritmo
