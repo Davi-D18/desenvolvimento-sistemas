@@ -1,7 +1,7 @@
-Algoritmo "cadastro_produto"
+Algoritmo "cadastro_produtos"
 //
 //
-// Descrição   : Aqui você descreve o que o programa faz! (função)
+// Descriï¿½ï¿½o   : Aqui vocï¿½ descreve o que o programa faz! (funï¿½ï¿½o)
 // Autor(a)    : Nome do(a) aluno(a)
 // Data atual  : 5/3/2026
 Tipo
@@ -11,7 +11,7 @@ Tipo
    fimregistro
 
 Var
-   // Seção de Declarações das variáveis
+   // Seï¿½ï¿½o de Declaraï¿½ï¿½es das variï¿½veis
 
    data_produtos: vetor[0..3] de produto
    i, j: inteiro
@@ -23,18 +23,18 @@ inicio
    para j de 1 ate 3 faca
       Escreval("-------------------------------------------")
       Escreval(j ," - Nome: ", data_produtos[j].nome)
-      Escreval("      Preço: ", data_produtos[j].preco)
+      Escreval("      Preï¿½o: ", data_produtos[j].preco)
       timer(310)
       timer(0)
    fimpara
 fimprocedimento
 Inicio
-   // Seção de Comandos, procedimento, funções, operadores, etc...
+   // Seï¿½ï¿½o de Comandos, procedimento, funï¿½ï¿½es, operadores, etc...
    para i de 1 ate 3 faca
-      Escreva("Informe o nome do", i, "° produto: ")
+      Escreva("Informe o nome do", i, "ï¿½ produto: ")
       leia(data_produtos[i].nome)
 
-      Escreva("Informe o preço do", i, "° produto: ")
+      Escreva("Informe o preï¿½o do", i, "ï¿½ produto: ")
       leia(data_produtos[i].preco)
       escreval()
    fimpara
