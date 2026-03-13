@@ -1,31 +1,22 @@
 Algoritmo "sistema_controle_producao_industrial"
-// Disciplina   : [Lógica de Programação]
-// Professor   : Hilton Elias
-// Descrição   : Aqui você descreve o que o programa faz! (função)
-// Autor(a)    : Nome do(a) aluno(a)
-// Data atual  : 10/03/2026
+
 const
-   capacidade_estoque = 15
+   capacidade_estoque = 10
    quantidade_componentes = 5
 
-tipo
-   estoque_data = registro
-      codigo: inteiro
-      componente: caractere
-      quantidade: inteiro
-   fimregistro
-
 Var
-   // Seção de Declarações das variáveis
-   estoque: vetor[1..capacidade_estoque] de estoque_data
-   kits_produzidos: vetor[1..capacidade_estoque] de caractere
-   opcao_menu, i, iniciar_estoque: inteiro
    componentes: vetor[1..quantidade_componentes] de caractere
+   quantidades: vetor[1..quantidade_componentes] de inteiro
+   codigos: vetor[1..quantidade_componentes] de inteiro
+   pedidos: vetor[1..capacidade_estoque] de caractere
+
+   kits_produzidos: vetor[1..capacidade_estoque] de caractere
+   opcao_menu, numero_kit, numero_pedido: inteiro
+
 
 procedimento exibir_loading(texto: caractere)
 var
    i, tempo_espera: inteiro
-
 inicio
    tempo_espera <- 750
 
@@ -35,6 +26,7 @@ inicio
    timer(tempo_espera)
    escreva(".")
    timer(0)
+
    Para i de 1 ate 3 faca
       escreva(".")
       timer(tempo_espera)
@@ -42,8 +34,8 @@ inicio
    fimpara
 
    Escreval()
-
 fimprocedimento
+
 
 procedimento menu()
 inicio
@@ -58,42 +50,51 @@ inicio
    Escreval()
    Escreva("======>  ")
    leia(opcao_menu)
-
 fimprocedimento
+
 
 funcao verificar_produto_estoque(codigo: inteiro): logico
+var
+   i: inteiro
+   produto_encontrado: logico
 inicio
-   para i de 1 até capacidade_estoque faca
-      Se (estoque[i].codigo) > 0 entao
-         se (estoque[i].codigo = codigo) entao
-            retorne Verdadeiro
-         senao
-            retorne Falso
-         fimse
+   para i de 1 ate quantidade_componentes faca
+      se codigos[i] = codigo entao
+         produto_encontrado <- verdadeiro
       fimse
    fimpara
+
+   se produto_encontrado = verdadeiro entao
+      retorne verdadeiro
+   senao
+      retorne falso
+   fimse
+
 fimfuncao
 
+
 procedimento exibir_estoque()
+var
+   i: inteiro
 inicio
    Escreval("=========== ESTOQUE DE COMPONENTES ===========")
-   para i de 1 até capacidade_estoque faca
-      Se (estoque[i].codigo) > 0 entao
-         Escreval("Código: ", estoque[i].codigo)
-         Escreval("Componente: " + estoque[i].componente)
-         Escreval("Quantidade: ", estoque[i].quantidade)
-         Escreval("--------------------------------------------")
-         timer(260)
-         timer(0)
-      fimse
+
+   para i de 1 ate quantidade_componentes faca
+      Escreval("Código: ", codigos[i])
+      Escreval("Componente: ", componentes[i])
+      Escreval("Quantidade: ", quantidades[i])
+      Escreval("--------------------------------------------")
+
+      timer(260)
+      timer(0)
    fimpara
 fimprocedimento
+
 
 procedimento registrar_entrada_estoque()
 var
    codigo_componente, quantidade, i: inteiro
    componente_existe: logico
-
 inicio
    limpatela()
    exibir_estoque()
@@ -105,15 +106,16 @@ inicio
 
    componente_existe <- verificar_produto_estoque(codigo_componente)
 
-   Se componente_existe entao
+   se componente_existe entao
+
       Escreva("Informe a quantidade para adicionar: ")
       leia(quantidade)
 
       exibir_loading("Adicionando")
 
-      Para i de 1 até capacidade_estoque faca
-         se (estoque[i].codigo > 0) e (estoque[i].codigo = codigo_componente) entao
-            estoque[i].quantidade <- estoque[i].quantidade + quantidade
+      para i de 1 ate quantidade_componentes faca
+         se codigos[i] = codigo_componente entao
+            quantidades[i] <- quantidades[i] + quantidade
          fimse
       fimpara
 
@@ -129,11 +131,12 @@ inicio
    fimse
 fimprocedimento
 
+
 procedimento criar_kit()
 var
    produzir_kit: logico
    opcao: caractere
-   indice, numero: inteiro
+   indice, i: inteiro
 inicio
    produzir_kit <- verdadeiro
 
@@ -141,54 +144,80 @@ inicio
    leia(opcao)
 
    se (opcao = "s") ou (opcao = "S") entao
+
       exibir_loading("Criando kit")
-      para i de 1 ate capacidade_estoque faca
-         se estoque[i].codigo > 0 entao
-            se estoque[i].quantidade < 1 entao
-               produzir_kit <- falso
-            fimse
+
+      para i de 1 ate quantidade_componentes faca
+         se quantidades[i] < 1 entao
+            produzir_kit <- falso
          fimse
       fimpara
 
+
       se produzir_kit = verdadeiro entao
-         para indice de 1 ate capacidade_estoque faca
-            se (estoque[indice].codigo > 0) entao
-               estoque[indice].quantidade <- estoque[indice].quantidade - 1
-            fimse
+
+         para indice de 1 ate quantidade_componentes faca
+            quantidades[indice] <- quantidades[indice] - 1
          fimpara
 
-         numero <- numero + 1
+         numero_kit <- numero_kit + 1
+         kits_produzidos[numero_kit] <- "KIT-00" + numpcarac(numero_kit)
 
-         kits_produzidos[numero] <- "KIT-00" + numero
       senao
          Escreval("Erro: Faltam peças para construir um kit")
          timer(1200)
          timer(0)
       fimse
-   senao se (opcao = "n") ou (opcao = "N")
+
+   senao
       Escreval("Saindo")
       timer(450)
       timer(0)
-   senao
-      Escreval("Opção inválida")
    fimse
-
 fimprocedimento
 
-Inicio
-   // Seção de Comandos, procedimento, funções, operadores, etc...
+procedimento criar_pedido()
+var
+inicio
+   numero_pedido <- numero_pedido + 1
+   exibir_loading("Criando pedido")
+
+   pedidos[numero_pedido] <- "PEDIDO-00" + numpcarac(numero_pedido)
+   Escreval("Novo pedido criado com sucesso!")
+   Escreval("Pedido: " + pedidos[numero_pedido])
+   timer(4200)
+   timer(0)
+fimprocedimento
+
+
+procedimento _iniciar_estoque()
+inicio
+
    componentes[1] <- "Sensor"
    componentes[2] <- "Motor"
    componentes[3] <- "Placa"
    componentes[4] <- "Bateria"
    componentes[5] <- "Chassi"
 
-   para iniciar_estoque de 1 ate quantidade_componentes faca
-      estoque[iniciar_estoque].codigo <- iniciar_estoque
-      estoque[iniciar_estoque].componente <- componentes[iniciar_estoque]
-      estoque[iniciar_estoque].quantidade <- 1
-   fimpara
-   
+   codigos[1] <- 1
+   codigos[2] <- 2
+   codigos[3] <- 3
+   codigos[4] <- 4
+   codigos[5] <- 5
+
+   quantidades[1] <- 1
+   quantidades[2] <- 1
+   quantidades[3] <- 1
+   quantidades[4] <- 1
+   quantidades[5] <- 1
+
+fimprocedimento
+
+
+Inicio
+
+   _iniciar_estoque()
+
    menu()
 
    escolha opcao_menu
@@ -197,12 +226,17 @@ Inicio
       limpatela()
       registrar_entrada_estoque()
       criar_kit()
+
    caso 2
       limpatela()
       exibir_estoque()
+
    caso 3
       limpatela()
       criar_kit()
+   caso 4
+      criar_pedido()
+
    fimescolha
 
 Fimalgoritmo
