@@ -13,6 +13,10 @@ Var
    kits_produzidos: vetor[1..capacidade_estoque] de caractere
    opcao_menu, numero_kit, numero_pedido: inteiro
 
+   pedido_fila, kit_produzido: inteiro
+   quantidade_pedidos, quantidade_kits: inteiro
+   quantidade_entregas_realizadas: inteiro
+
 
 procedimento exibir_loading(texto: caractere)
 var
@@ -162,6 +166,12 @@ inicio
 
          numero_kit <- numero_kit + 1
          kits_produzidos[numero_kit] <- "KIT-00" + numpcarac(numero_kit)
+         quantidade_kits <- quantidade_kits + 1
+         
+         escreval(kits_produzidos[numero_kit] + " foi criado com sucesso!")
+         
+         timer(2200)
+         timer(0)
 
       senao
          Escreval("Erro: Faltam peças para construir um kit")
@@ -183,6 +193,8 @@ inicio
    exibir_loading("Criando pedido")
 
    pedidos[numero_pedido] <- "PEDIDO-00" + numpcarac(numero_pedido)
+   quantidade_pedidos <- quantidade_pedidos + 1
+
    Escreval("Novo pedido criado com sucesso!")
    Escreval("Pedido: " + pedidos[numero_pedido])
    timer(4200)
@@ -205,11 +217,113 @@ inicio
    codigos[4] <- 4
    codigos[5] <- 5
 
-   quantidades[1] <- 1
-   quantidades[2] <- 1
-   quantidades[3] <- 1
-   quantidades[4] <- 1
-   quantidades[5] <- 1
+   quantidades[1] <- 2
+   quantidades[2] <- 2
+   quantidades[3] <- 2
+   quantidades[4] <- 2
+   quantidades[5] <- 2
+
+   quantidade_pedidos <- 0
+   quantidade_kits <- 0
+   numero_kit <- 0
+
+fimprocedimento
+
+procedimento processar_entrega()
+var
+   i: inteiro
+   kit_atendido, pedido_atendido, mensagem_loading: caractere
+inicio
+   se (quantidade_pedidos >= 1) e (quantidade_kits >= 1) entao
+      kit_atendido <- kits_produzidos[quantidade_kits]
+      kits_produzidos[quantidade_kits] <- ""
+      quantidade_kits <- quantidade_kits - 1
+
+      pedido_atendido <- pedidos[1]
+      para i de 1 ate quantidade_pedidos - 1 faca
+         pedidos[i] <- pedidos[i+1]
+      fimpara
+
+      pedidos[quantidade_pedidos] <- ""
+      quantidade_pedidos <- quantidade_pedidos - 1
+
+      mensagem_loading <- kit_atendido + " sendo preparado para o " + pedido_atendido
+      exibir_loading(mensagem_loading)
+
+      quantidade_entregas_realizadas <- quantidade_entregas_realizadas + 1
+
+      Escreval("Entrega processada!")
+      Escreval("Pedido atendido: " + pedido_atendido)
+      Escreval("Kit entregue: " + kit_atendido)
+      timer(2500)
+      timer(0)
+
+   senao
+      se quantidade_kits = 0 entao
+         Escreval("Sem kits no estoque!")
+      fimse
+      se quantidade_pedidos = 0 entao
+         Escreval("Sem pedidos de kits!")
+      fimse
+      timer(2000)
+      timer(0)
+   fimse
+
+fimprocedimento
+
+procedimento exibir_painel_fabrica()
+var
+   i, j: inteiro
+inicio
+   Escreval("=========== PAINEL DA FABRICA ===========")
+   escreval()
+   exibir_estoque()
+   escreval()
+   escreval("----------------------------------------")
+   escreval()
+
+   Escreval("KITS PRODUZIDOS")
+   para i de quantidade_kits ate 1 passo -1 faca
+      Escreval("| " + kits_produzidos[i] + " |")
+      timer(285)
+      timer(0)
+   fimpara
+
+   escreval("----------------------------------------")
+   escreval()
+
+   timer(2200)
+   timer(0)
+
+   Escreval("PEDIDOS DE CLIENTES")
+
+   para j de 1 ate quantidade_pedidos faca
+      Escreval(j, "- " + pedidos[j])
+   fimpara
+
+   escreval("----------------------------------------")
+   escreval()
+
+   timer(2200)
+   timer(0)
+
+   Escreval("ENTREGAS REALIZADAS")
+   escreval()
+   escreval("Total:", quantidade_entregas_realizadas)
+
+   escreval("----------------------------------------")
+   escreval()
+
+   timer(2200)
+   timer(0)
+
+   Escreval("DEMANDAS PENDENTES")
+   escreval()
+   Escreval("Pedidos aguardando:", quantidade_pedidos)
+   escreval()
+   escreval("=========================================")
+   timer(6000)
+   timer(0)
 
 fimprocedimento
 
@@ -218,25 +332,45 @@ Inicio
 
    _iniciar_estoque()
 
-   menu()
-
-   escolha opcao_menu
-
-   caso 1
+   repita
       limpatela()
-      registrar_entrada_estoque()
-      criar_kit()
+      menu()
 
-   caso 2
-      limpatela()
-      exibir_estoque()
+      escolha opcao_menu
 
-   caso 3
-      limpatela()
-      criar_kit()
-   caso 4
-      criar_pedido()
+      caso 1
+         limpatela()
+         registrar_entrada_estoque()
+         criar_kit()
 
-   fimescolha
+      caso 2
+         limpatela()
+         exibir_estoque()
+
+      caso 3
+         limpatela()
+         criar_kit()
+
+      caso 4
+         limpatela()
+         criar_pedido()
+
+      caso 5
+         limpatela()
+         processar_entrega()
+      caso 6
+         limpatela()
+         exibir_painel_fabrica()
+      caso 0
+         exibir_loading("Saindo")
+      outrocaso
+         Escreval("Opção inválida, tente novamente!")
+         timer(2000)
+         timer(0)
+
+
+      fimescolha
+
+   ate opcao_menu = 0
 
 Fimalgoritmo
